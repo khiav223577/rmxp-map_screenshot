@@ -72,14 +72,9 @@ class Spriteset_Map
       bitmap.blt(sprite.x, sprite.y, sprite.bitmap, sprite.src_rect)
     end
 
-    #exp_time = (bitmap.height * bitmapwidth) * 0.00000664
-    #string = "Taking screenshot please wait.... \n" + 
-    #        "Number of pixels: #{bitmapheight * bitmapwidth} \n" +
-    #        "Estamated time: #{exp_time} seconds."
-    #print("#{string}")    old_time = Time.now
-    bitmap.save_png(png_name)
-    #bit.make_png("#{png_name}")
     old_time = Time.new
+    bitmap.save_png(png_name)
+    # bitmap.make_png("#{png_name}")
     string = "#{png_name} was created. \n" +
             "File size: width #{bitmap.width}, height #{bitmap.height}. \n" +
             "Time taken: #{Time.now - old_time} seconds."
