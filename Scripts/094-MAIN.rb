@@ -69,7 +69,7 @@ class Spriteset_Map
     bitmap = @tilemap.bitmap
     $game_map.events.values.each do |event|
       next if (sprite = character_sprite_of(event.id)) == nil
-      bitmap.blt(sprite.x, sprite.y, sprite.bitmap, sprite.src_rect)
+      bitmap.blt(sprite.x - sprite.ox, sprite.y - sprite.oy, sprite.bitmap, sprite.src_rect)
     end
 
     old_time = Time.new
