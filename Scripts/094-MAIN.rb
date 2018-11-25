@@ -69,8 +69,7 @@ class Spriteset_Map
     bitmap = @tilemap.bitmap
     $game_map.events.values.each do |event|
       next if (sprite = character_sprite_of(event.id)) == nil
-      rect = Rect.new(0, 0, sprite.bitmap.width, sprite.bitmap.height)
-      bitmap.blt(sprite.x, sprite.y, sprite.bitmap, rect)
+      bitmap.blt(sprite.x, sprite.y, sprite.bitmap, sprite.src_rect)
     end
 
     #exp_time = (bitmap.height * bitmapwidth) * 0.00000664
