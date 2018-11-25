@@ -51,6 +51,10 @@ class Game_Map
   end
 end
 class Spriteset_Map
+  def character_sprite_of(id)
+    @character_sprites.find{|s| s.character.id == id }
+  end
+
   def screen_shot!
     mid = $game_map.map_id
     png_name = "OUTPUT/%03d-%s.png" % [mid,$map_infos[mid].name]
@@ -62,17 +66,23 @@ class Spriteset_Map
     rescue
     end
     
-    bit = @tilemap.bitmap
-    #exp_time = (bit.height * bit.width) * 0.00000664
+    bitmap = @tilemap.bitmap
+    $game_map.events.values.each do |event|
+      next if (sprite = character_sprite_of(event.id)) == nil
+      rect = Rect.new(0, 0, sprite.bitmap.width, sprite.bitmap.height)
+      bitmap.blt(sprite.x, sprite.y, sprite.bitmap, rect)
+    end
+
+    #exp_time = (bitmap.height * bitmapwidth) * 0.00000664
     #string = "Taking screenshot please wait.... \n" + 
-    #        "Number of pixels: #{bit.height * bit.width} \n" +
+    #        "Number of pixels: #{bitmapheight * bitmapwidth} \n" +
     #        "Estamated time: #{exp_time} seconds."
     #print("#{string}")    old_time = Time.now
-    bit.save_png(png_name)
+    bitmap.save_png(png_name)
     #bit.make_png("#{png_name}")
     old_time = Time.new
     string = "#{png_name} was created. \n" +
-            "File size: width #{bit.width}, height #{bit.height}. \n" +
+            "File size: width #{bitmap.width}, height #{bitmap.height}. \n" +
             "Time taken: #{Time.now - old_time} seconds."
     print("#{string}")
   end
