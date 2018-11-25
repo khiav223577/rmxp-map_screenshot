@@ -28,9 +28,9 @@ class Game_Map
     @need_refresh = false
     # 設定地圖事件資料
     @events = {}
-    #for i in @map.events.keys
-    #  @events[i] = Game_Event.new(@map_id, @map.events[i])
-    #end
+    for i in @map.events.keys
+      @events[i] = Game_Event.new(@map_id, @map.events[i])
+    end
     # 設定共通事件資料
     @common_events = {}
     #for i in 1...$data_common_events.size
