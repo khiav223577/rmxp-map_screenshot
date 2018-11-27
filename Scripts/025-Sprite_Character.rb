@@ -41,10 +41,15 @@ class Sprite_Character < RPG::Sprite
         self.oy = 32
       # 元件 ID 為無效值的情況下
       else
-        self.bitmap = RPG::Cache.character(@character.character_name,
-          @character.character_hue)
-        @cw = bitmap.width / 4
-        @ch = bitmap.height / 4
+        hue = @character.character_hue
+        name = @character.character_name
+        begin
+          self.bitmap = RPG::Cache.character(name, hue)
+        rescue Errno::ENOENT
+          self.bitmap = RPG::Cache.character('', hue)
+        end
+        @cw = bitmap.width / $pic_pattern_max[name]
+        @ch = bitmap.height / $pic_dir_max[name]
         self.ox = @cw / 2
         self.oy = @ch
       end

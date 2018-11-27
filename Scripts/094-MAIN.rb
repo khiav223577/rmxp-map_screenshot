@@ -28,9 +28,9 @@ class Game_Map
     @need_refresh = false
     # 設定地圖事件資料
     @events = {}
-    #for i in @map.events.keys
-    #  @events[i] = Game_Event.new(@map_id, @map.events[i])
-    #end
+    for i in @map.events.keys
+      @events[i] = Game_Event.new(@map_id, @map.events[i])
+    end
     # 設定共通事件資料
     @common_events = {}
     #for i in 1...$data_common_events.size
@@ -51,6 +51,10 @@ class Game_Map
   end
 end
 class Spriteset_Map
+  def character_sprite_of(id)
+    @character_sprites.find{|s| s.character.id == id }
+  end
+
   def screen_shot!
     mid = $game_map.map_id
     png_name = "OUTPUT/%03d-%s.png" % [mid,$map_infos[mid].name]
@@ -62,17 +66,17 @@ class Spriteset_Map
     rescue
     end
     
-    bit = @tilemap.bitmap
-    #exp_time = (bit.height * bit.width) * 0.00000664
-    #string = "Taking screenshot please wait.... \n" + 
-    #        "Number of pixels: #{bit.height * bit.width} \n" +
-    #        "Estamated time: #{exp_time} seconds."
-    #print("#{string}")    old_time = Time.now
-    bit.save_png(png_name)
-    #bit.make_png("#{png_name}")
+    bitmap = @tilemap.bitmap
+    $game_map.events.values.each do |event|
+      next if (sprite = character_sprite_of(event.id)) == nil
+      bitmap.blt(sprite.x - sprite.ox, sprite.y - sprite.oy, sprite.bitmap, sprite.src_rect)
+    end
+
     old_time = Time.new
+    bitmap.save_png(png_name)
+    # bitmap.make_png("#{png_name}")
     string = "#{png_name} was created. \n" +
-            "File size: width #{bit.width}, height #{bit.height}. \n" +
+            "File size: width #{bitmap.width}, height #{bitmap.height}. \n" +
             "Time taken: #{Time.now - old_time} seconds."
     print("#{string}")
   end
