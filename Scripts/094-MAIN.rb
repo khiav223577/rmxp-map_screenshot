@@ -102,6 +102,9 @@ old_time = Time.now
 time1 = old_time
 map_id = 0
 $Bitmap.draw_text(0,240-16,640,32,"0",1)
+all_pngs = {}
+Dir['OUTPUT/*.png'].each{|s| all_pngs[s] = true }
+
 while true
   map_id += 1
   break if not FileTest.exist?("Data/Map%03d.rxdata" % map_id)
@@ -121,13 +124,7 @@ while true
     next
   end
   png_name = "OUTPUT/%03d-%s.png" % [map_id, map_info.name]
-  next if FileTest.exist?(png_name)
-  begin
-    file = open(png_name, "r") # 不知道為什麼上面 FileTest 判不存在，但其實存在
-    file.close()
-    next
-  rescue
-  end
+  next if all_pngs[png_name]
 
   $game_map.setup(map_id)
   Spriteset_Map.new.screen_shot!(png_name)
