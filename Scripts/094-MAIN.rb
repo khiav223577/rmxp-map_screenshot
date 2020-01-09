@@ -127,6 +127,7 @@ while true
   next if all_pngs[png_name]
 
   $game_map.setup(map_id)
+  $game_map.update # 跑事件的移動路線(因為有些會用腳本移動半格)
   Spriteset_Map.new.screen_shot!(png_name)
 end
 p Time.now - old_time
