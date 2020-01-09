@@ -55,22 +55,7 @@ class Spriteset_Map
     @character_sprites.find{|s| s.character.id == id }
   end
 
-  def screen_shot!
-    mid = $game_map.map_id
-    map_info = $map_infos[mid]
-    if map_info == nil
-      p "找不到地圖 #{mid} 的名字，請確認 MapInfos.rxdata 資料是否正確"
-      return
-    end
-    png_name = "OUTPUT/%03d-%s.png" % [mid, map_info.name]
-    return if FileTest.exist?(png_name)
-    begin
-      file = open(png_name, "r")
-      file.close()
-      return
-    rescue
-    end
-    
+  def screen_shot!(png_name)
     bitmap = @tilemap.bitmap
     $game_map.events.values.each do |event|
       next if (sprite = character_sprite_of(event.id)) == nil
@@ -129,8 +114,23 @@ while true
   if map_id > 99999 #error detect
     raise RuntimeError, "map_id > 99999"
   end
+
+  map_info = $map_infos[map_id]
+  if map_info == nil
+    p "找不到地圖 #{map_id} 的名字，請確認 MapInfos.rxdata 資料是否正確"
+    next
+  end
+  png_name = "OUTPUT/%03d-%s.png" % [map_id, map_info.name]
+  next if FileTest.exist?(png_name)
+  begin
+    file = open(png_name, "r") # 不知道為什麼上面 FileTest 判不存在，但其實存在
+    file.close()
+    next
+  rescue
+  end
+
   $game_map.setup(map_id)
-  Spriteset_Map.new.screen_shot!
+  Spriteset_Map.new.screen_shot!(png_name)
 end
 p Time.now - old_time
 exit
