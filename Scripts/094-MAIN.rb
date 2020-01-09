@@ -1,3 +1,5 @@
+$data_common_events = {} # 不跑公共事件
+
 class Game_Map
   def setup(map_id)
     # 地圖 ID 記錄到 @map_id 
