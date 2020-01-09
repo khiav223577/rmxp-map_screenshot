@@ -109,10 +109,10 @@ while true
   map_id += 1
   break if not FileTest.exist?("Data/Map%03d.rxdata" % map_id)
   if (time2 = Time.now) - time1 > 0.02 #*999999999999999
-    time1 = time2
     $Bitmap.clear
     $Bitmap.draw_text(0,240-16,640,32,map_id.to_s,1)
     Graphics.update
+    time1 = time2 = Time.now
   end
   if map_id > 99999 #error detect
     raise RuntimeError, "map_id > 99999"
