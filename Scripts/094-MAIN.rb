@@ -59,8 +59,11 @@ class Spriteset_Map
 
   def screen_shot!(png_name)
     bitmap = @tilemap.bitmap
-    $game_map.events.values.each do |event|
-      next if (sprite = character_sprite_of(event.id)) == nil
+    
+    character_sprites = $game_map.events.values.map{|event| character_sprite_of(event.id) }
+    character_sprites.compact!
+    character_sprites.sort!{|a, b| a.z <=> b.z }
+    character_sprites.each do |sprite|
       bitmap.blt(sprite.x - sprite.ox, sprite.y - sprite.oy, sprite.bitmap, sprite.src_rect, sprite.opacity)
     end
 
