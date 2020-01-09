@@ -208,7 +208,6 @@ class Game_Event < Game_Character
   #--------------------------------------------------------------------------
   def update
     super
-    return # 不跑自動或並行處理事件內容
     # 自動啟動事件判斷
     check_event_trigger_auto
     # 平行處理有效的情況下
