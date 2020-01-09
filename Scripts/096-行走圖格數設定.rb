@@ -1,383 +1,382 @@
-# ------------------------------------------------------------------------------
-# ● 行走圖格數設定
-# ------------------------------------------------------------------------------
-$pic_pattern_max = Hash.new(4)      # 設定行走圖的畫格
-# 人物
-$pic_pattern_max["Lead_Lin 1 Hit"] = 1
-$pic_pattern_max["Lead_Lin 1 Roll"] = 7
-$pic_pattern_max["Lead_Lin 1 Jump"] = 2
-$pic_pattern_max["Lead_Lin 1 Idle"] = 12
-$pic_pattern_max["Lead_Lin 1 W0105"] = 1
-$pic_pattern_max["Lead_Lin 1 W0107"] = 8
-$pic_pattern_max["Lead_Lin 1 Dash"] = 6
-$pic_pattern_max["Lead_Lin 1 Quarter"] = 7
-$pic_pattern_max["Lead_Lin 1 W0203"] = 2
-$pic_pattern_max["Lead_Lin 1 W0203_1"] = 6
-$pic_pattern_max["Lead_Lin 1 W02D"] = 3
-$pic_pattern_max["Lead_Lin 1 W0204"] = 6
-$pic_pattern_max["Lead_Lin 1 Skill01"] = 2
-$pic_pattern_max["Lead_Lin 1 Skill02"] = 2
-$pic_pattern_max["Lead_Lin 1 Skill03"] = 2
-$pic_pattern_max["Lead_Lin 1 Skill03_02"] = 2
-$pic_pattern_max["Lead_Lin 1 Skill04"] = 2
+ZERO_VEC = [0, 0].freeze
+$pic_pattern_max = Hash.new(4)         # 設定行走圖的畫格
+$pic_dir_max     = Hash.new(4)         # 設定行走圖的面向有幾個
+$piccha_center   = Hash.new(ZERO_VEC)  # 行走圖顯示中心調整[X,Y]
+$pic_start_xyz   = Hash.new(ZERO_VEC)  # 圖片位置修正[前方，右方，Z方向]
+$picchg_bydir    = Hash.new({}.freeze)
+pic_setting = { # key => [dir_max, pattern_max]
+  # 人物
+  'Lead_Lin 1 Hit'            => [4, 1],
+  'Lead_Lin 1 Roll'           => [4, 7],
+  'Lead_Lin 1 Jump'           => [4, 2],
+  'Lead_Lin 1 Idle'           => [4, 12],
 
+  'Lead_Lin 1 W0101'          => [4, 4, { :center => [0, 2], :start_xyz => [6, 0] }],
+  'Lead_Lin 1 W0102'          => [4, 4, { :center => [0, 2], :start_xyz => [6, 0] }],
+  'Lead_Lin 1 W0103'          => [4, 4, { :center => [0, 2], :start_xyz => [6, 0] }],
+  'Lead_Lin 1 W0104'          => [4, 4, { :center => [0, 2], :start_xyz => [6, 0] }],
+  'Lead_Lin 1 W0105'          => [4, 1],
+  'Lead_Lin 1 W0106'          => [4, 4, { :center => [0, 7] }],
+  'Lead_Lin 1 W0107'          => [4, 8, { :center => [0, 8] }],
 
-$pic_pattern_max["Lead_Roger 1 W0101"] = 5
-$pic_pattern_max["Lead_Roger 1 W0102"] = 5
-$pic_pattern_max["Lead_Roger 1 W0103"] = 5
-$pic_pattern_max["Lead_Roger 1 W0104"] = 6
-$pic_pattern_max["Lead_Roger 1 W0105"] = 6
-$pic_pattern_max["Lead_Roger 1 Idle"] = 12
-$pic_pattern_max["Lead_Roger 1 Dash"] = 6
-$pic_pattern_max["Lead_Roger 1 Jump"] = 2
-$pic_pattern_max["Lead_Roger 1 Hit"] = 1
-$pic_pattern_max["Lead_Roger 1 Skill_Use"] = 2
-$pic_pattern_max["Lead_Roger 1 Skill01"] = 2
-$pic_pattern_max["Lead_Roger 1 Skill01_02"] = 2
-$pic_pattern_max["Lead_Roger 1 Skill02"] = 2
-$pic_pattern_max["Lead_Roger 1 Skill02_02"] = 2
-$pic_pattern_max["Lead_Roger 1 Skill03"] = 2
-$pic_pattern_max["Lead_Roger 1 Skill03_02"] = 2
-$pic_pattern_max["Lead_Roger 1 Roll"] = 7
+  'Lead_Lin 1 Dash'           => [4, 6],
+  'Lead_Lin 1 Quarter'        => [4, 7],
+  'Lead_Lin 1 W0201'          => [4, 4, { :chg_by_dir => { 4 => [-4, 0], 6 => [4, 0] }}],
+  'Lead_Lin 1 W0202'          => [4, 4, { :chg_by_dir => { 4 => [-4, 0], 6 => [4, 0] }}],
+  'Lead_Lin 1 W0203'          => [4, 2, { :chg_by_dir => { 4 => [-4, 0], 6 => [4, 0] }}],
+  'Lead_Lin 1 W0203_1'        => [1, 6, { :center => [0, -4] }],
+  'Lead_Lin 1 W02D'           => [4, 3, { :chg_by_dir => { 4 => [-10, -3], 6 => [10, -3] }}],
+  'Lead_Lin 1 W0204'          => [1, 6],
+  'Lead_Lin 1 Skill01'        => [4, 2],
+  'Lead_Lin 1 Skill02'        => [4, 2],
+  'Lead_Lin 1 Skill03'        => [4, 2],
+  'Lead_Lin 1 Skill03_02'     => [4, 2],
+  'Lead_Lin 1 Skill04'        => [4, 2],
+  'Lead_Lin 1 Skill10'        => [4, 2],
+  'Lead_Lin 1 Skill11'        => [4, 2],
 
+  'Lead_Roger 1 W0101'        => [4, 5],
+  'Lead_Roger 1 W0102'        => [4, 5],
+  'Lead_Roger 1 W0103'        => [4, 5],
+  'Lead_Roger 1 W0104'        => [4, 6],
+  'Lead_Roger 1 W0105'        => [4, 6],
+  'Lead_Roger 1 Idle'         => [4, 12],
+  'Lead_Roger 1 Dash'         => [4, 6],
+  'Lead_Roger 1 Jump'         => [4, 2],
+  'Lead_Roger 1 Hit'          => [4, 1],
+  'Lead_Roger 1 Roll'         => [4, 7],
+  'Lead_Roger 1 Skill_Use'    => [4, 2],
+  'Lead_Roger 1 Skill01'      => [4, 2],
+  'Lead_Roger 1 Skill01_02'   => [4, 2],
+  'Lead_Roger 1 Skill02'      => [4, 2],
+  'Lead_Roger 1 Skill02_02'   => [4, 2],
+  'Lead_Roger 1 Skill03'      => [4, 2],
+  'Lead_Roger 1 Skill03_02'   => [4, 2],
+  'Lead_Roger 1 Skill10'      => [4, 2],
+  'Lead_Roger 1 Skill11'      => [4, 2],
 
-$pic_pattern_max["Lead_Sonia 1 Dash"] = 6
-$pic_pattern_max["Lead_Sonia 1 Hit"] = 1
-$pic_pattern_max["Lead_Sonia 1 Idle"] = 12
-$pic_pattern_max["Lead_Sonia 1 Jump"] = 2
-$pic_pattern_max["Lead_Sonia 1 Roll"] = 7
-$pic_pattern_max["Lead_Sonia 1 Skill_Use"] = 2
-$pic_pattern_max["Lead_Sonia 1 W0103"] = 2
-$pic_pattern_max["Lead_Sonia 1 W0104"] = 2
-$pic_pattern_max["Lead_Sonia 1 W0104_1"] = 10
-$pic_pattern_max["Lead_Sonia 1 Skill01"] = 2
-$pic_pattern_max["Lead_Sonia 1 Skill01_02"] = 5
-$pic_pattern_max["Lead_Sonia 1 Skill02"] = 2
-$pic_pattern_max["Lead_Sonia 1 Skill02_02"] = 2
-$pic_pattern_max["Lead_Sonia 1 Skill03"] = 7
-$pic_pattern_max["Lead_Sonia 1 Skill03_02"] = 5
-$pic_pattern_max["Lead_Sonia 0 Mist"] = 5
+  'Lead_Sonia 1 Dash'         => [4, 6],
+  'Lead_Sonia 1 Hit'          => [4, 1],
+  'Lead_Sonia 1 Idle'         => [4, 12],
+  'Lead_Sonia 1 Jump'         => [4, 2],
+  'Lead_Sonia 1 Roll'         => [4, 7],
+  'Lead_Sonia 1 Skill_Use'    => [4, 2],
+  'Lead_Sonia 1 W0101_1'      => [4, 4, { :chg_by_dir => { 4 => [0, -3], 6 => [0, -3] }}],
+  'Lead_Sonia 1 W0103'        => [4, 2],
+  'Lead_Sonia 1 W0104'        => [4, 2],
+  'Lead_Sonia 1 W0104_1'      => [1, 10, { :center => [0, -3] }],
+  'Lead_Sonia 1 Skill01'      => [4, 2],
+  'Lead_Sonia 1 Skill01_02'   => [4, 5],
+  'Lead_Sonia 1 Skill02'      => [4, 2],
+  'Lead_Sonia 1 Skill02_02'   => [4, 3],
+  'Lead_Sonia 1 Skill03'      => [4, 2],
+  'Lead_Sonia 1 Skill03_02'   => [4, 12],
+  'Lead_Sonia 1 Skill10'      => [4, 2],
+  'Lead_Sonia 1 Skill11'      => [4, 2],
+  'Lead_Sonia 0 Mist'         => [1, 5],
 
-#攻擊效果
-$pic_pattern_max["Lead_Lin 1 W0100"] = 6
-$pic_pattern_max["Lead_Lin 1 W0200"] = 6
-$pic_pattern_max["Other_Focus Power0"] = 6
-$pic_pattern_max["Other_Focus Power1"] = 10
-$pic_pattern_max["Foe 1 W0000"] = 3
-$pic_pattern_max["Foe 1 W0001"] = 7
+  'Lead_Sonia 0 WithLin'      => [4, 6],
 
-#怪獸 Tier 1-1
-$pic_pattern_max["Foe_Dorforce 1 Skill"] = 1
-$pic_pattern_max["Foe_Dorforce 1 Down"] = 1
-$pic_pattern_max["Foe_Dorforce 1 Hit"] = 1
-$pic_pattern_max["Foe_Vic 1 Down"] = 1
-$pic_pattern_max["Foe_Vic 1 Hit"] = 1
-$pic_pattern_max["Foe_Marudo 1 Hit"] = 1
-$pic_pattern_max["Foe_Marudo 1 Down"] = 1
-$pic_pattern_max["Foe_Marudo 1 Atk"] = 2
-#怪獸 Tier 1-2
-$pic_pattern_max["Foe_Berilize 1 Down"] = 1
-$pic_pattern_max["Foe_Berilize 1 Hit"] = 1
-$pic_pattern_max["Foe_Berilize 1 Skill"] = 1
-$pic_pattern_max["Foe_Shifennuo 1 Down"] = 1
-$pic_pattern_max["Foe_Shifennuo 1 Hit"] = 1
-$pic_pattern_max["Foe_Shifennuo 1 Skill"] = 1
-$pic_pattern_max["Foe_Shaluota 1 Down"] = 1
-$pic_pattern_max["Foe_Shaluota 1 Hit"] = 1
-$pic_pattern_max["Foe_Biqituo 1 Hit"] = 1
-$pic_pattern_max["Foe_Biqituo 1 Down"] = 1
-#怪獸 Tier 2-1
-$pic_pattern_max["Foe_Pomol 1 Down"] = 1
-$pic_pattern_max["Foe_Pomol 1 Hit"] = 1
-$pic_pattern_max["Foe_Pomol 1 Skill"] = 2
-$pic_pattern_max["Foe_Pomol 1 Skill1"] = 2
-$pic_pattern_max["Foe_Stokke 1 Atk"] = 2
-$pic_pattern_max["Foe_Stokke 1 Down"] = 1
-$pic_pattern_max["Foe_Stokke 1 Hit"] = 1
-$pic_pattern_max["Foe_Stokke"] = 2
-$pic_pattern_max["Foe_Kumu 1 Down"] = 1
-$pic_pattern_max["Foe_Kumu 1 Hit"] = 1
-$pic_pattern_max["Foe_Kumu 1 Skill"] = 5
-$pic_pattern_max["Foe_Kumu 1 Skill 1"] = 6
-#怪獸 Tier 2-2
-$pic_pattern_max["Foe_Raimash 1 Down"] = 1
-$pic_pattern_max["Foe_Raimash 1 Hit"] = 1
-$pic_pattern_max["Foe_Raimash 1 Skill"] = 1
-$pic_pattern_max["Foe_Raimash 1 Skill1"] = 2
-$pic_pattern_max["Foe_Gerkara 1 Down"] = 1
-$pic_pattern_max["Foe_Gerkara 1 Hit"] = 1
-$pic_pattern_max["Foe_Gerkara 1 Skill"] = 2
-$pic_pattern_max["Foe_Gerkara 1 Skill1"] = 9
-$pic_pattern_max["Foe_Poru 1 Down"] = 1
-$pic_pattern_max["Foe_Poru 1 Hit"] = 1
-$pic_pattern_max["Foe_Poru 1 Skill"] = 1
-$pic_pattern_max["Foe_Poru 1 Skill1"] = 3
-#怪獸 Tier 3-1
-$pic_pattern_max["Foe_Acol 1 Down"] = 1
-$pic_pattern_max["Foe_Acol 1 Hit"] = 1
-$pic_pattern_max["Foe_Yeasany 1 Hit"] = 1
-$pic_pattern_max["Foe_Yeasany 1 Down"] = 1
-$pic_pattern_max["Foe_Yeasany 1 Skill"] = 2
-$pic_pattern_max["Foe_Yeasany 1 Skill1"] = 3
+  # 神祕生物
+  'Cryptid1'                  => [4, 8],
+  'Cryptid2'                  => [4, 8],
+  'Cryptid3'                  => [4, 8],
+  'Cryptid4'                  => [4, 8],
 
-#BOSS王1
-$pic_pattern_max["Boss_Genikamei 1 Hit"] = 1
-$pic_pattern_max["Boss_Genikamei 1 Down"] = 1
-$pic_pattern_max["Boss_Genikamei 1 Skill1_0"] = 2
-$pic_pattern_max["Boss_Genikamei 1 Skill1"] = 2
-$pic_pattern_max["Boss_Genikamei 1 Skill2"] = 1
-$pic_pattern_max["Boss_Genikamei 1 Skill2_0"] = 13
-$pic_pattern_max["Boss_Genikamei 1 Skill3"] = 2
-$pic_pattern_max["Boss_Genikamei 1 Skill3_0"] = 5
+  # 攻擊效果
+  'Lead_Lin 1 W0100'          => [1, 6],
+  'Lead_Lin 1 W0200'          => [1, 6],
+  'Other_Focus'               => [1, 4, { :start_xyz => [0, 0, 32] }],
+  'Other_Focus Power0'        => [1, 6],
+  'Other_Focus Power1'        => [1, 10, { :center => [0, 12] }],
+  'Foe 1 W0000'               => [1, 3],
+  'Foe 1 W0001'               => [1, 7],
 
-#BOSS王2
-$pic_pattern_max["Boss_Mosolya 1 Atk"] = 2
-$pic_pattern_max["Boss_Mosolya 1 Down"] = 1
-$pic_pattern_max["Boss_Mosolya 1 Hit"] = 1
-$pic_pattern_max["Boss_Mosolya 1 Skill2"] = 2
-$pic_pattern_max["Boss_Mosolya 1 Skill2_1"] = 7
-$pic_pattern_max["Boss_Mosolya 1 Skill4"] = 2
-$pic_pattern_max["Boss_Mosolya 1 Skill4_0"] = 5
+  # 怪獸 Tier 1-1
+  'Foe_Dorforce 1 Skill'      => [4, 1],
+  'Foe_Dorforce 1 Down'       => [4, 1],
+  'Foe_Dorforce 1 Hit'        => [4, 1],
+  'Foe_Vic 1 Down'            => [4, 1],
+  'Foe_Vic 1 Hit'             => [4, 1],
+  'Foe_Marudo 1 Hit'          => [4, 1],
+  'Foe_Marudo 1 Down'         => [4, 1],
+  'Foe_Marudo 1 Atk'          => [4, 2],
+  # 怪獸 Tier 1-2
+  'Foe_Berilize 1 Down'       => [4, 1],
+  'Foe_Berilize 1 Hit'        => [4, 1],
+  'Foe_Berilize 1 Skill'      => [4, 1],
+  'Foe_Berilize 1 Skill1'     => [1, 4, { :center => [4, -16] }],
+  'Foe_Shifennuo 1 Down'      => [4, 1],
+  'Foe_Shifennuo 1 Hit'       => [4, 1],
+  'Foe_Shifennuo 1 Skill'     => [4, 1],
+  'Foe_Shifennuo 1 Skill1'    => [1, 4],
+  'Foe_Shaluota'              => [4, 4, { :chg_by_dir => { 2 => [0, 16], 8 => [0, 16] }}],
+  'Foe_Shaluota 1 Atk'        => [4, 4, { :center => [0, 16] }],
+  'Foe_Shaluota 1 Down'       => [4, 1, { :chg_by_dir => { 2 => [0, 16], 8 => [0, 16] }}],
+  'Foe_Shaluota 1 Hit'        => [4, 1, { :chg_by_dir => { 2 => [0, 16], 8 => [0, 16] }}],
+  'Foe_Shaluota 1 Move'       => [4, 4, { :chg_by_dir => { 2 => [0, 16], 8 => [0, 16] }}],
+  'Foe_Biqituo 1 Hit'         => [4, 1],
+  'Foe_Biqituo 1 Down'        => [4, 1],
+  # 怪獸 Tier 2-1
+  'Foe_Pomol'                 => [4, 4, { :start_xyz => [0, 0, 31] }],
+  'Foe_Pomol 1 Down'          => [4, 1, { :start_xyz => [0, 0, 31] }],
+  'Foe_Pomol 1 Hit'           => [4, 1, { :start_xyz => [0, 0, 31] }],
+  'Foe_Pomol 1 Move'          => [4, 4, { :start_xyz => [0, 0, 31] }],
+  'Foe_Pomol 1 Skill'         => [4, 2, { :start_xyz => [0, 0, 31] }],
+  'Foe_Pomol 1 Skill1'        => [1, 2, { :center => [-1, 4] }],
+  'Foe_Stokke'                => [4, 2, { :chg_by_dir => { 2 => [0, 12], 8 => [0, 12] }}],
+  'Foe_Stokke 1 Atk'          => [4, 2, { :chg_by_dir => { 2 => [0, 12], 8 => [0, 12] }}],
+  'Foe_Stokke 1 Down'         => [4, 1, { :chg_by_dir => { 2 => [0, 12], 8 => [0, 12] }}],
+  'Foe_Stokke 1 Hit'          => [4, 1, { :chg_by_dir => { 2 => [0, 12], 8 => [0, 12] }}],
+  'Foe_Stokke 1 Move'         => [4, 4, { :chg_by_dir => { 2 => [0, 12], 8 => [0, 12] }}],
+  'Foe_Kumu 1 Down'           => [4, 1],
+  'Foe_Kumu 1 Hit'            => [4, 1],
+  'Foe_Kumu 1 Skill'          => [4, 5],
+  'Foe_Kumu 1 Skill1'         => [1, 6],
+  # 怪獸 Tier 2-2
+  'Foe_Raimash 1 Down'        => [4, 1],
+  'Foe_Raimash 1 Hit'         => [4, 1],
+  'Foe_Raimash 1 Skill'       => [4, 1],
+  'Foe_Raimash 1 Skill1'      => [1, 2],
+  'Foe_Gerkara 1 Down'        => [4, 1],
+  'Foe_Gerkara 1 Hit'         => [4, 1],
+  'Foe_Gerkara 1 Skill'       => [4, 2],
+  'Foe_Gerkara 1 Skill1'      => [1, 9],
+  'Foe_Poru 1 Down'           => [4, 1],
+  'Foe_Poru 1 Hit'            => [4, 1],
+  'Foe_Poru 1 Skill'          => [4, 1],
+  'Foe_Poru 1 Skill1'         => [1, 3],
+  # 怪獸 Tier 3-1
+  'Foe_Acol 1 Down'           => [4, 1],
+  'Foe_Acol 1 Hit'            => [4, 1],
+  'Foe_Acol 1 Skill'          => [4, 4, { :center => [0, 32] }],
+  'Foe_Yeasany 1 Hit'         => [4, 1],
+  'Foe_Yeasany 1 Down'        => [4, 1],
+  'Foe_Yeasany 1 Skill'       => [4, 2],
+  'Foe_Yeasany 1 Skill1'      => [4, 3],
+  'Foe_Sirink 1 Hit'          => [4, 1],
+  'Foe_Sirink 1 Down'         => [4, 1],
+  'Foe_Sirink 1 Skill'        => [4, 7],
+  'Foe_Sirink 1 Skill1'       => [1, 7],
+  # 怪獸 Tier 3-2
+  'Foe_Kuchiron 1 Skill1'     => [1, 8],
+  'Foe_Kuchiron 1 Down'       => [4, 1],
+  'Foe_Kuchiron 1 Hit'        => [4, 1],
+  'Foe_Eletar 1 Down'         => [4, 1],
+  'Foe_Eletar 1 Hit'          => [4, 1],
+  'Foe_Eletar 1 Skill1'       => [1, 4],
+  'Foe_Normanful 1 Down'      => [4, 1],
+  'Foe_Normanful 1 Hit'       => [4, 1],
+  'Foe_Normanful 1 Skill1'    => [1, 4],
 
-#事件
-$pic_pattern_max["Object_Mirror"] = 12
-$pic_pattern_max["Object_Roof"] = 1
-$pic_pattern_max["Object_Lock"] = 8
-$pic_pattern_max["Other_Floor"] = 1
-$pic_pattern_max["Other_Magic1"] = 22
-$pic_pattern_max["Other_Magic2"] = 10
-$pic_pattern_max["Other_Magic2_2"] = 10
-$pic_pattern_max["Map_Tree"] = 1
-$pic_pattern_max["Map_Tree2"] = 1
-$pic_pattern_max["Map_Tree3"] = 1
-$pic_pattern_max["Map_Tree4"] = 1
-$pic_pattern_max["Object_Obstacle"] = 6
-$pic_pattern_max["Object_Floor"] = 1
-$pic_pattern_max["Object_Gate"] = 1
-$pic_pattern_max["Object_Game Obstacle"] = 2
+  # 怪獸 Tier 3-3
+  'Foe_Holope 1 Down '        => [4, 1],
+  'Foe_Holope 1 Hit'          => [4, 1],
+  'Foe_Holope 1 Skill'        => [4, 1],
+  'Foe_Holope 1 Skill1'       => [1, 8],
+  'Foe_Ina 1 Down'            => [4, 1],
+  'Foe_Ina 1 Hit'             => [4, 1],
+  'Foe_Ina 1 Skill1'          => [1, 10, { :start_xyz => [48, 0] }],
+  'Foe_Freyna 1 Down'         => [4, 1],
+  'Foe_Freyna 1 Hit'          => [4, 1],
+  'Foe_Freyna 1 Skill'        => [4, 2],
+  'Foe_Freyna 1 Skill1'       => [1, 6],
 
-#技能
-$pic_pattern_max["Foe_Dorforce 1 Skill1"] = 14
-$pic_pattern_max["Foe_Biqituo 1 Skill 1"] = 6
-$pic_pattern_max["Skill 01_00"] = 8
-$pic_pattern_max["Skill 01_01"] = 4
-$pic_pattern_max["Skill 01_02"] = 15
-$pic_pattern_max["Skill 01_03"] = 5
-$pic_pattern_max["Skill 01_04"] = 10
-$pic_pattern_max["Skill 01_05"] = 15
-$pic_pattern_max["Skill 01_06"] = 20
-$pic_pattern_max["Skill 01_07"] = 4
-$pic_pattern_max["Skill 01_08"] = 4
-$pic_pattern_max["Skill 01_09"] = 20
-$pic_pattern_max["Skill 01_10"] = 15
+  # 怪獸 Tier 4
+  'Foe_Labalo 1 Down'         => [4, 1],
+  'Foe_Labalo 1 Hit'          => [4, 1],
+  'Foe_Labalo 1 Skill'        => [4, 1],
+  'Foe_Labalo 1 Skill1'       => [1, 6],
+  'Foe_Javisk 1 Down'         => [4, 1],
+  'Foe_Javisk 1 Hit'          => [4, 1],
+  'Foe_Javisk 1 Skill'        => [4, 4, { :center => [0, 16] }],
+  'Foe_Javisk 1 Skill1'       => [1, 4, { :center => [0, -16] }],
+  'Foe_Orhan 1 Down'          => [4, 1],
+  'Foe_Orhan 1 Hit'           => [4, 1],
+  'Foe_Orhan 1 Skill1'        => [1, 4],
 
-$pic_pattern_max["Skill 02_00"] = 6
-$pic_pattern_max["Skill 02_01"] = 8
-$pic_pattern_max["Skill 02_01_2"] = 4
-$pic_pattern_max["Skill 02_02"] = 4
-$pic_pattern_max["Skill 02_00_2"] = 4
-$pic_pattern_max["Skill 02_00_2-"] = 4
-$pic_pattern_max["Skill 02_03"] = 10
-$pic_pattern_max["Skill 02_04"] = 9
-$pic_pattern_max["Skill 02_05"] = 15
-$pic_pattern_max["Skill 02_06"] = 5
-$pic_pattern_max["Skill 02_07"] = 18
-$pic_pattern_max["Skill 02_08"] = 5
-$pic_pattern_max["Skill 02_09"] = 12
-$pic_pattern_max["Skill 02_10"] = 4
+  # 溪水山丘 - 怪獸 Tier 5
+  'Foe_Zaro 1 Down'           => [4, 1],
+  'Foe_Zaro 1 Hit'            => [4, 1],
+  'Foe_Zaro 1 Skill'          => [4, 2],
+  'Foe_Zaro 1 Skill1'         => [1, 4, { :start_xyz => [-16, 0] }],
+  'Foe_Qalider'               => [4, 2],
+  'Foe_Qalider 1 Down'        => [4, 1],
+  'Foe_Qalider 1 Hit'         => [4, 1],
+  'Foe_Qalider 1 Skill'       => [4, 2],
+  'Foe_Qalider 1 Skill1'      => [1, 6],
+  'Foe_Puspa 1 Down'          => [4, 1],
+  'Foe_Puspa 1 Hit'           => [4, 1],
+  'Foe_Puspa 1 Skill'         => [4, 1],
+  'Foe_Puspa 1 Skill1'        => [1, 5],
+  
+  # 白色巨塔 - 怪獸
+  'Foe_Tiota 1 Down'          => [4, 1],
+  'Foe_Tiota 1 Hit'           => [4, 1],
+  'Foe_Tiota 1 Skill'         => [4, 1],
+  'Foe_Tiota 1 Skill1'        => [2, 3],
+  'Foe_Xesidy 1 Down'         => [4, 1],
+  'Foe_Xesidy 1 Hit'          => [4, 1],
+  'Foe_Xesidy 1 Skill'        => [4, 5],
+  'Foe_Xesidy 1 Skill1'       => [1, 4],
+  'Foe_Urda 1 Down'           => [4, 1],
+  'Foe_Urda 1 Skill'          => [4, 2],
+  'Foe_Urda 1 Skill1'         => [1, 7],
 
-$pic_pattern_max["Skill 03_00"] = 6
-$pic_pattern_max["Skill 03_01"] = 8
-$pic_pattern_max["Skill 03_02"] = 20
-$pic_pattern_max["Skill 03_03"] = 5
-$pic_pattern_max["Skill 03_04"] = 4
-$pic_pattern_max["Skill 03_05"] = 12
-$pic_pattern_max["Skill 03_06"] = 7
-$pic_pattern_max["Skill 03_07"] = 7
-$pic_pattern_max["Skill 03_08"] = 13
-$pic_pattern_max["Skill 03_09"] = 16
-$pic_pattern_max["Skill 03_10"] = 10
+  # BOSS王1
+  'Boss_Genikamei'            => [4, 4, { :chg_by_dir => { 2 => [0, 4], 8 => [0, 4] }}],
+  'Boss_Genikamei 1 Atk'      => [4, 4, { :chg_by_dir => { 2 => [0, 4], 8 => [0, 4] }}],
+  'Boss_Genikamei 1 Hit'      => [4, 1, { :chg_by_dir => { 2 => [0, 4], 8 => [0, 4] }}],
+  'Boss_Genikamei 1 Down'     => [4, 1, { :chg_by_dir => { 2 => [0, 4], 8 => [0, 4] }}],
+  'Boss_Genikamei 1 Move'     => [4, 4, { :chg_by_dir => { 2 => [0, 4], 8 => [0, 4] }}],
+  'Boss_Genikamei 1 Skill1_0' => [4, 2],
+  'Boss_Genikamei 1 Skill1'   => [4, 2],
+  'Boss_Genikamei 1 Skill2'   => [4, 1],
+  'Boss_Genikamei 1 Skill2_0' => [1, 13],
+  'Boss_Genikamei 1 Skill3'   => [4, 2],
+  'Boss_Genikamei 1 Skill3_0' => [1, 5],
 
-$pic_pattern_max["Skill 04_00"] = 5
-$pic_pattern_max["Skill 04_01"] = 9
-$pic_pattern_max["Skill 04_02"] = 4
-$pic_pattern_max["Skill 04_03"] = 8
-$pic_pattern_max["Skill 04_04"] = 8
-$pic_pattern_max["Skill 04_05"] = 7
-$pic_pattern_max["Skill 04_06"] = 5
-$pic_pattern_max["Skill 04_07"] = 7
-$pic_pattern_max["Skill 04_08"] = 6
-$pic_pattern_max["Skill 04_09"] = 4
-$pic_pattern_max["Skill 04_10"] = 3
+  # BOSS王2
+  'Boss_Mosolya 1 Atk'        => [4, 2],
+  'Boss_Mosolya 1 Down'       => [4, 1],
+  'Boss_Mosolya 1 Hit'        => [4, 1],
+  'Boss_Mosolya 1 Skill1'     => [1, 4, { :center => [0, 28] }],
+  'Boss_Mosolya 1 Skill2'     => [4, 2],
+  'Boss_Mosolya 1 Skill2_0'   => [1, 4],
+  'Boss_Mosolya 1 Skill2_1'   => [1, 7],
+  'Boss_Mosolya 1 Skill4'     => [4, 2],
+  'Boss_Mosolya 1 Skill4_0'   => [1, 5],
 
-$pic_pattern_max["Skill 05_00"] = 3
-$pic_pattern_max["Skill 05_01"] = 4
-$pic_pattern_max["Skill 05_02"] = 4
-$pic_pattern_max["Skill 05_03"] = 5
-$pic_pattern_max["Skill 05_04"] = 3
-$pic_pattern_max["Skill 05_05"] = 5
-$pic_pattern_max["Skill 05_06"] = 6
-$pic_pattern_max["Skill 05_07"] = 3
-$pic_pattern_max["Skill 05_08"] = 5
-$pic_pattern_max["Skill 05_09"] = 1
-$pic_pattern_max["Skill 05_10"] = 6
+  # 事件
+  'Object_Amulet'             => [1, 4],
+  'Object_Mirror'             => [1, 12],
+  'Object_Roof'               => [1, 1, { :start_xyz => [0, 0, 320] }],
+  'Object_Lock'               => [1, 8],
+  'Other_Floor'               => [1, 1],
+  'Other_Magic1'              => [1, 22],
+  'Other_Magic2'              => [1, 10],
+  'Other_Magic2_2'            => [1, 10],
+  'Other_Road'                => [1, 1],
+  'Object_Crack'              => [1, 4],
+  'Object_Fountain'           => [4, 4, { :start_xyz => [0, 0, -16] }],
+  'Object_Light3'             => [4, 4, { :start_xyz => [0, 0, 9999] }],
+  'Map_Tree'                  => [1, 1],
+  'Map_Tree2'                 => [1, 1, { :start_xyz => [0, 0, -32] }],
+  'Map_Tree3'                 => [1, 1],
+  'Map_Tree4'                 => [1, 1],
+  'Map_Tree5'                 => [1, 1],
+  'Map_Tree6'                 => [1, 1],
+  'Map_Tree7'                 => [1, 1],
+  'Object_Obstacle'           => [4, 4, { :start_xyz => [0, 0, 32] }],
+  'Object_Obstacle0'          => [1, 4],
+  'Object_Switch'             => [4, 4, { :start_xyz => [0, 0, 32] }],
+  'Object_Floor'              => [1, 1],
+  'Object_Gate'               => [1, 1],
+  'Object_Game Obstacle'      => [1, 2],
+  'Object_Water drop'         => [1, 8],
+  'Object_Water curtain'      => [1, 4],
+  'Object_Water curtain2'     => [1, 4],
 
-$pic_pattern_max["Skill 06_01"] = 20
-$pic_pattern_max["Skill 06_02"] = 3
-$pic_pattern_max["Skill 06_02_02"] = 14
-$pic_pattern_max["Skill 06_03"] = 9
-$pic_pattern_max["Skill 06_03_02"] = 5
-$pic_pattern_max["Skill 06_04"] = 10
-$pic_pattern_max["Skill 06_04_02"] = 10
-$pic_pattern_max["Skill 06_06"] = 13
-$pic_pattern_max["Skill 06_07"] = 24
-$pic_pattern_max["Skill 06_08"] = 21
-$pic_pattern_max["Skill 06_11"] = 6
-$pic_pattern_max["Skill 06_11_02"] = 12
-$pic_pattern_max["Skill 06_12"] = 2
-$pic_pattern_max["Skill 06_12_02"] = 7
-$pic_pattern_max["Skill 06_12_03"] = 5
+  # Buff
+  'Other_Buff_Paralysis'      => [1, 4, { :start_xyz => [0, 0, 32], :center => [0,  -8] }],
+  'Other_Buff_Silence'        => [1, 4, { :start_xyz => [0, 0, 32], :center => [0,  -8] }],
+  'Other_Buff_Poison'         => [1, 4, { :start_xyz => [0, 0, 32], :center => [0,  -8] }],
+  'Other_Buff_Faint'          => [1, 4, { :start_xyz => [0, 0, 32], :center => [0, -23] }],
+  'Other_Buff_Freeze'         => [1, 4, { :start_xyz => [0, 0, 32], :center => [0,   8] }],
+  'Other_Buff_Cure'           => [1, 4, { :start_xyz => [0, 0, 32], :center => [0,  -8] }],
+  'Other_Buff_Confusion'      => [1, 4, { :start_xyz => [0, 0, 32], :center => [0, -23] }],
+  'Other_Buff_Burning'        => [1, 4, { :start_xyz => [0, 0, 32], :center => [0,  -8] }],
+  'Other_Buff_Blind'          => [1, 4, { :start_xyz => [0, 0, 32], :center => [0, -23] }],
 
+  # 技能
+  'Foe_Dorforce 1 Skill1'     => [1, 14],
+  'Foe_Biqituo 1 Skill1'      => [1, 6],
+  'Skill 01_00'               => [1, 8],
+  'Skill 01_01'               => [1, 4],
+  'Skill 01_02'               => [1, 15, { :center => [4, -4] }],
+  'Skill 01_03'               => [1, 5, { :start_xyz => [70, 4] }],
+  'Skill 01_04'               => [1, 10],
+  'Skill 01_05'               => [1, 15, { :center => [4, -4] }],
+  'Skill 01_06'               => [1, 20, { :center => [4, -4] }],
+  'Skill 01_07'               => [1, 4],
+  'Skill 01_08'               => [1, 4],
+  'Skill 01_09'               => [1, 20, { :center => [0, -10] }],
+  'Skill 01_10'               => [1, 15, { :center => [1, 1] }],
 
-#------------------------------------------------------------------------------
-#●   設定行走圖的面向有幾個
-#------------------------------------------------------------------------------
+  'Skill 02_00'               => [1, 6],
+  'Skill 02_01'               => [4, 8],
+  'Skill 02_01_2'             => [1, 4],
+  'Skill 02_02'               => [1, 4],
+  'Skill 02_00_2'             => [1, 4],
+  'Skill 02_00_2-'            => [2, 4],
+  'Skill 02_03'               => [1, 10, { :center => [0, -64] }],
+  'Skill 02_04'               => [2, 9],
+  'Skill 02_05'               => [1, 15],
+  'Skill 02_06'               => [1, 5],
+  'Skill 02_07'               => [1, 18],
+  'Skill 02_08'               => [1, 5],
+  'Skill 02_09'               => [1, 12],
+  'Skill 02_10'               => [1, 4],
 
-$pic_dir_max = Hash.new(4)      #設定行走圖的面向有幾個
-$pic_dir_max["Foe_Dorforce 1 Skill1"] = 1
-$pic_dir_max["Foe_Biqituo 1 Skill 1"] = 1
-$pic_dir_max["Foe_Shifennuo 1 Skill1"] = 1
-$pic_dir_max["Foe_Berilize 1 Skill1"] = 1
-$pic_dir_max["Boss_Genikamei 1 Skill2_0"] = 1
-$pic_dir_max["Boss_Genikamei 1 Skill3_0"] = 1
-$pic_dir_max["Skill 01_00"] = 1
-$pic_dir_max["Skill 01_01"] = 1
-$pic_dir_max["Skill 01_02"] = 1
-$pic_dir_max["Skill 01_03"] = 1
-$pic_dir_max["Skill 01_04"] = 1
-$pic_dir_max["Skill 01_05"] = 1
-$pic_dir_max["Skill 01_06"] = 1
-$pic_dir_max["Skill 01_07"] = 1
-$pic_dir_max["Skill 01_08"] = 1
-$pic_dir_max["Skill 01_09"] = 1
-$pic_dir_max["Skill 01_10"] = 1
+  'Skill 03_00'               => [1, 6],
+  'Skill 03_01'               => [1, 8],
+  'Skill 03_02'               => [1, 20],
+  'Skill 03_03'               => [1, 5],
+  'Skill 03_04'               => [1, 4],
+  'Skill 03_05'               => [1, 12],
+  'Skill 03_06'               => [1, 7],
+  'Skill 03_07'               => [1, 7],
+  'Skill 03_08'               => [1, 13],
+  'Skill 03_09'               => [1, 16],
+  'Skill 03_10'               => [1, 10],
 
-$pic_dir_max["Skill 02_00"] = 1
-$pic_dir_max["Skill 02_01_2"] = 1
-$pic_dir_max["Skill 02_02"] = 1
-$pic_dir_max["Skill 02_00_2-"] = 2
-$pic_dir_max["Skill 02_00_2"] = 1
-$pic_dir_max["Skill 02_03"] = 1
-$pic_dir_max["Skill 02_04"] = 2
-$pic_dir_max["Skill 02_05"] = 1
-$pic_dir_max["Skill 02_06"] = 1
-$pic_dir_max["Skill 02_07"] = 1
-$pic_dir_max["Skill 02_08"] = 1
-$pic_dir_max["Skill 02_09"] = 1
-$pic_dir_max["Skill 02_10"] = 1
+  'Skill 04_00'               => [1, 5],
+  'Skill 04_01'               => [1, 9, { :center => [2, 0], :chg_by_dir => { 2 => [0, -8], 4 => [0, -8], 6 => [0, -8] }}],
+  'Skill 04_02'               => [1, 4],
+  'Skill 04_03'               => [2, 8, { :start_xyz => [0, 0, -64] }],
+  'Skill 04_04'               => [4, 8, { :start_xyz => [0, 0, -64] }],
+  'Skill 04_05'               => [2, 7, { :center => [0, -16] }],
+  'Skill 04_06'               => [1, 5, { :start_xyz => [0, 0, -128] }],
+  'Skill 04_07'               => [1, 7],
+  'Skill 04_08'               => [2, 6, { :start_xyz => [0, 0, -128] }],
+  'Skill 04_09'               => [4, 4, { :center => [0, -16], :chg_by_dir => { 2 => [0, -16], 8 => [0, -16] }}],
+  'Skill 04_10'               => [1, 3, { :center => [0, -24] }],
 
-$pic_dir_max["Skill 03_00"] = 1
-$pic_dir_max["Skill 03_01"] = 1
-$pic_dir_max["Skill 03_02"] = 1
-$pic_dir_max["Skill 03_03"] = 1
-$pic_dir_max["Skill 03_04"] = 1
-$pic_dir_max["Skill 03_05"] = 1
-$pic_dir_max["Skill 03_06"] = 1
-$pic_dir_max["Skill 03_07"] = 1
-$pic_dir_max["Skill 03_08"] = 1
-$pic_dir_max["Skill 03_09"] = 1
-$pic_dir_max["Skill 03_10"] = 1
+  'Skill 05_00'               => [1, 3],
+  'Skill 05_01'               => [1, 4, { :center => [0, -32] }],
+  'Skill 05_02'               => [1, 4, { :center => [0, -32] }],
+  'Skill 05_03'               => [1, 5, { :center => [0, -32] }],
+  'Skill 05_04'               => [2, 3],
+  'Skill 05_05'               => [1, 5, { :start_xyz => [48, 0, 0], :chg_by_dir => { 2 => [0, -16] }}],
+  'Skill 05_06'               => [1, 6],
+  'Skill 05_07'               => [1, 3],
+  'Skill 05_08'               => [1, 5, { :chg_by_dir => { 4 => [0, -8], 6 => [0, -8] }}],
+  'Skill 05_09'               => [1, 1],
+  'Skill 05_10'               => [1, 6],
 
-$pic_dir_max["Skill 04_00"] = 1
-$pic_dir_max["Skill 04_01"] = 1
-$pic_dir_max["Skill 04_02"] = 1
-$pic_dir_max["Skill 04_03"] = 2
-$pic_dir_max["Skill 04_04"] = 4
-$pic_dir_max["Skill 04_05"] = 2
-$pic_dir_max["Skill 04_06"] = 1
-$pic_dir_max["Skill 04_07"] = 1
-$pic_dir_max["Skill 04_08"] = 2
-$pic_dir_max["Skill 04_09"] = 4
-$pic_dir_max["Skill 04_10"] = 1
-
-$pic_dir_max["Skill 05_00"] = 1
-$pic_dir_max["Skill 05_01"] = 1
-$pic_dir_max["Skill 05_02"] = 1
-$pic_dir_max["Skill 05_03"] = 1
-$pic_dir_max["Skill 05_04"] = 2
-$pic_dir_max["Skill 05_05"] = 1
-$pic_dir_max["Skill 05_06"] = 1
-$pic_dir_max["Skill 05_07"] = 1
-$pic_dir_max["Skill 05_08"] = 1
-$pic_dir_max["Skill 05_09"] = 1
-$pic_dir_max["Skill 05_10"] = 1
-
-$pic_dir_max["Skill 06_01"] = 1
-$pic_dir_max["Skill 06_02"] = 1
-$pic_dir_max["Skill 06_02_02"] = 1
-$pic_dir_max["Skill 06_03"] = 1
-$pic_dir_max["Skill 06_03_02"] = 1
-$pic_dir_max["Skill 06_04"] = 1
-$pic_dir_max["Skill 06_04_02"] = 1
-$pic_dir_max["Skill 06_06"] = 1
-$pic_dir_max["Skill 06_07"] = 1
-$pic_dir_max["Skill 06_08"] = 1
-$pic_dir_max["Skill 06_11"] = 1
-$pic_dir_max["Skill 06_11_02"] = 1
-$pic_dir_max["Skill 06_12_02"] = 1
-$pic_dir_max["Skill 06_12_03"] = 1
-$pic_dir_max["Skill 06_13"] = 1
-$pic_dir_max["Lead_Lin 1 W0203_1"] = 1
-$pic_dir_max["Lead_Lin 1 W0204"] = 1
-
-$pic_dir_max["Other_Floor"] = 1
-$pic_dir_max["Other_Magic1"] = 1
-$pic_dir_max["Other_Magic2"] = 1
-$pic_dir_max["Other_Magic2_2"] = 1
-$pic_dir_max["Map_Tree"] = 1
-$pic_dir_max["Map_Tree2"] = 1
-$pic_dir_max["Map_Tree3"] = 1
-$pic_dir_max["Map_Tree4"] = 1
-$pic_dir_max["Object_Lock"] = 1
-$pic_dir_max["Object_Obstacle"] = 1
-$pic_dir_max["Object_Obstacle0"] = 1
-$pic_dir_max["Object_Floor"] = 1
-$pic_dir_max["Object_Gate"] = 1
-$pic_dir_max["Object_Mirror"] = 1
-$pic_dir_max["Object_Roof"] = 1
-$pic_dir_max["Object_Water curtain"] = 1
-$pic_dir_max["Object_Water curtain2"] = 1
-$pic_dir_max["Object_Game Obstacle"] = 1
-
-$pic_dir_max["Lead_Lin 1 W0100"] = 1
-$pic_dir_max["Lead_Lin 1 W0200"] = 1
-$pic_dir_max["Lead_Sonia 1 W0104_1"] = 1
-$pic_dir_max["Lead_Sonia 0 Mist"] = 1
-$pic_dir_max["Other_Focus"] = 1
-$pic_dir_max["Other_Focus Power0"] = 1
-$pic_dir_max["Other_Focus Power1"] = 1
-$pic_dir_max["Object_Amulet"] = 1
-$pic_dir_max["Foe 1 W0000"] = 1
-$pic_dir_max["Foe 1 W0001"] = 1
-
-
-$pic_dir_max["Foe_Pomol 1 Skill1"] = 1
-$pic_dir_max["Foe_Kumu 1 Skill 1"] = 1
-$pic_dir_max["Foe_Raimash 1 Skill1"] = 1
-$pic_dir_max["Foe_Gerkara 1 Skill1"] = 1
-$pic_dir_max["Foe_Poru 1 Skill1"] = 1
-
-$pic_dir_max["Other_Buff_Paralysis"] = 1
-$pic_dir_max["Other_Buff_Silence"] = 1
-$pic_dir_max["Other_Buff_Poison"] = 1
-$pic_dir_max["Other_Buff_Faint"] = 1
-$pic_dir_max["Other_Buff_Freeze"] = 1
-$pic_dir_max["Other_Buff_Cure"] = 1
-$pic_dir_max["Other_Buff_Confusion"] = 1
-$pic_dir_max["Other_Buff_Burning"] = 1
-$pic_dir_max["Other_Buff_Blind"] = 1
-
-$pic_dir_max["Boss_Mosolya 1 Skill1"] = 1
-$pic_dir_max["Boss_Mosolya 1 Skill2_0"] = 1
-$pic_dir_max["Boss_Mosolya 1 Skill2_1"] = 1
-$pic_dir_max["Boss_Mosolya 1 Skill4_0"] = 1
+  'Skill 06_01'               => [1, 20, { :center => [4, -12] }],
+  'Skill 06_02'               => [1, 3],
+  'Skill 06_02_02'            => [1, 14],
+  'Skill 06_03'               => [1, 9],
+  'Skill 06_03_02'            => [1, 5],
+  'Skill 06_04'               => [1, 10],
+  'Skill 06_04_02'            => [1, 10],
+  'Skill 06_06'               => [1, 13],
+  'Skill 06_07'               => [1, 24],
+  'Skill 06_08'               => [1, 21],
+  'Skill 06_11'               => [1, 6],
+  'Skill 06_11_02'            => [1, 12],
+  'Skill 06_12'               => [4, 2],
+  'Skill 06_12_02'            => [1, 7],
+  'Skill 06_12_03'            => [1, 6],
+  'Skill 06_13'               => [1, 4],
+  'Skill 06_13_02'            => [4, 1],
+}.each do |key, (dir_max, pattern_max, options)|
+  pattern_max.try{|s| $pic_pattern_max[key] = s }
+  dir_max.try{|s| $pic_dir_max[key] = s }
+  if options
+    options[:center].try{|s| $piccha_center[key] = s.freeze }
+    options[:start_xyz].try{|s| $pic_start_xyz[key] = s.freeze }
+    options[:chg_by_dir].try{|s| $picchg_bydir[key] = s.freeze }
+  end
+end
